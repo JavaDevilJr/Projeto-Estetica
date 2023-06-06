@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Natália Pimenta Estética - Cadastros</title>
+    <!-- Bootstrap 5-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+        integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+        crossorigin="anonymous"></script>
+        <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="icon" type="images" href="images/logotipo.png">
+    <link rel="stylesheet" href="css/style.css">
+   
+</head>
+<body onload="verificaLogado(); obtemDados('usuarios')">
+    <nav class="navbar navbar-expand-lg navbar-light bg-info">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="home.html"><img src="images/logotipo-semfundo.png" alt="img-menu" width="180" height="180"></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link" href="agenda.html"><i class="bi bi-calendar3"></i> AGENDA</a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link"  href="vendas.html"><i class="bi bi-bar-chart-fill"></i> VENDAS</a>
+              </li>
+
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-globe"></i> CADASTROS
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" style="background-color: #ebcfc4;" href="clientes.html">Clientes</a></li>
+                  <li><a class="dropdown-item" style="background-color: #ebcfc4;" href="funcionarios.html">Funcionários</a></li>
+                  <li><a class="dropdown-item" style="background-color: #ebcfc4;" href="servicos.html">Serviços e valores</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+          <div class="text-right">
+            <ul class="navbar-nav ms-auto flex-nowrap">
+            <li class="nav-item">
+                <button class="btn  btn-block bg-warning" onclick="logoutFirebase()">
+                  <i class="bi bi-box-arrow-in-right"></i></button>
+            </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <div id="msgAlerta"></div>
+
+      <form id="formNovoUsuario" method="post">
+        <fieldset>
+            <legend>Cadastro de Funcionários</legend>
+            <hr>
+            
+            <div class="form-group col-12">
+              <label for="email">E-mail</label>
+              <input type="email" name="email" placeholder="E-mail do usuário" id="email" required
+                  autofocus>
+            </div>
+          <div class="form-group col-3">
+              <label for="senha">Senha</label>
+              <input type="password" name="senha" class="form-group" placeholder="Senha do usuário" id="senha" required>
+          </div>
+          
+        <hr>
+            <div class="form-group">
+              <div class="d-grid gap-2 my-2">
+                
+            </div>
+              
+              <div class="col-12">
+                <button type="submit" class="btn btn-dark col-3">Cadastrar</button>
+                <button id="btnSalvarFunc" class="btn btn-success col-3" onclick="salvar(event, 'usuarios')">Salvar</button>
+                <button type="reset" id="limpar" name="limpar" class="btn btn-danger col-2">Limpar</button>
+                <button class="btn btn-primary col-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">Dados</button>
+              </div>
+            </div>
+        </fieldset>
+    </form>
+
+    
+    <div class="offcanvas offcanvas-bottom overflow-scroll" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
+      <div class="offcanvas-header ">
+        
+        <div class="col-md-12">
+          <h3 class="text-primary">Listagem de funcionarios</h3>
+          <button class="btn" type="button" disabled id="carregandoDados">
+            <span class="spinner-border spinner-border-sm" role="status"></span>
+            Carregando dados...
+          </button>
+          <div class="table-responsive">
+            <table id="tabelaDados" class="table table-sm table-striped table-bordered">
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="offcanvas-body small">
+      </div>
+    </div>
+
+    
+  <!-- Carregando os scripts do Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-storage-compat.js"></script>
+  <!-- Carregamento dos scripts do projeto-->
+  <script src="js/firebase/firebase.js"></script>
+  <script src="js/firebase/authentication.js"></script>
+  <script src="js/util/alerta.js"></script>
+  <script src="js/views/novo-usuario.js"></script>
+</body>
+</html>

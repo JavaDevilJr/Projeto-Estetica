@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form id="formCadastroFuncionario" method="post">
+        <legend>Informações Pessoais</legend>
+            <label for="nome">Nome:</label>
+            <input id="nomeFunc" type="text" name="nomeFunc" required placeholder="Nome Completo" title="Informe o Nome"
+                maxlength="50" autofocus>
+            <br><br>
+
+            <div class="row">
+              <div class="col-6">
+                <label for="cpf">CPF:</label>
+                <input id="cpfFunc"name="cpfFunc" type="text" class="form-control" aria-label="First name" oninput="formatarCPF(this)" maxlength="14"
+                pattern="[0-9]{3}[.][0-9]{3}[.][0-9]{3}[-][0-9]{2}" placeholder="999.999.999-99" required>>
+              </div>
+              <div class="col-6">
+                <label for="nascimento">Nascimento:</label>
+                <input type="date" class="form-control" placeholder="Nascimento" aria-label="Nascimento">
+              </div>
+            </div>
+
+            <label>Email:</label>
+            <input id="emailFunc" type="email" name="emailFunc" required placeholder="exemplo@exemplo.com" title="Informe um Email válido"
+                maxlength="50" autofocus>
+            <br><br>
+
+            <label for="sexo-0">Sexo:</label>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="sexo-0" id="inlineRadio1" value="masculino">Masculino
+            </div>
+
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="sexo-1"id="inlineRadio2" value="feminino">Feminino
+            </div>
+
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="sexo-2" id="inlineRadio3" value="não informado" disabled>Não informado
+            </div>
+
+            <legend>Endereço</legend>
+            <br>
+            <div class="row">
+              <div class="col-6">
+                <label for="cpf">CEP:</label>
+                <input id="cpfFunc"name="cpfFunc" type="text" class="form-control" aria-label="First name" oninput="formatarCPF(this)" maxlength="14"
+                pattern="[0-9]{3}[.][0-9]{3}[.][0-9]{3}[-][0-9]{2}" placeholder="999.999.999-99" required>
+              </div>
+            <label>Rua:</label>
+            <input id="emailFunc" type="email" name="emailFunc" required placeholder="Endereço" title="Informe uma Rua"
+                maxlength="50" autofocus>
+            <br><br>
+            
+
+
+
+            <div class="row">
+              <div class="col-6">
+                <label for="nascimento">Estado:</label>
+                <select class="form-select form-select-md " aria-label=".form-select-lg example">
+                  <option selected>Selecione</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                </select>
+              </div>
+              <div class="col-6">
+                <label for="nascimento">Estado:</label>
+                <select class="form-select form-select-md " aria-label=".form-select-lg example">
+                  <option selected>Selecione</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                </select>
+              </div>
+            </div>
+            
+            
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="salvarFuncionario"></label>
+              <div class="col-md-8">
+  
+                <button id="btnSalvarFuncionario" class="btn btn-success" onclick="salvarFuncionario(event, 'funcionarios')">💾 Salvar</button>
+  
+                <button type="reset" id="limpar" name="limpar" class="btn btn-danger">🧹Limpar</button>
+              </div>
+            </div>
+        </fieldset>
+    </form>
+</body>
+</html>
