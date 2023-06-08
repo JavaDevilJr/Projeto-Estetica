@@ -43,8 +43,7 @@ async function obtemDados(collection) {
           "<small>" + item.val().email + "</small>";
           novaLinha.insertCell().innerHTML =
           "<small>" + item.val().senha + "</small>";
-        novaLinha.insertCell().innerHTML = `<button class='btn btn-sm btn-danger' onclick=remover('${db}','${id}')><i class="bi bi-trash"></i></button>
-      <button class='btn btn-sm btn-warning' onclick=carregaDadosAlteracao('${db}','${id}')><i class="bi bi-pencil-square"></i></button>`;
+        novaLinha.insertCell().innerHTML = `<button class='btn btn-sm btn-danger' onclick=remover('${db}','${id}')><i class="bi bi-trash"></i></button>`;
       });
       let rodape = tabela.insertRow();
       rodape.className = "fundo-laranja-claro";
@@ -71,7 +70,7 @@ async function carregaDadosAlteracao(db, id) {
       document.getElementById("senha").value = snapshot.val().senha;
     });
 
-  document.getElementById("emailNovo").focus();
+  document.getElementById("email").focus();
 }
 
 /**

@@ -14,6 +14,48 @@
  * limitations under the License.
  */
 "use strict"; //modo estrito
+function validarCPF(cpf) {
+  cpf = cpf.replace(/\D/g, ''); // Remove caracteres não numéricos
+
+  if (cpf.length !== 11 || /^\d{11}$/.test(cpf.replace(/(\d)\1{10}/g, ''))) {
+    return false; // Verifica se o CPF tem 11 dígitos e se não possui todos os dígitos iguais
+  }
+
+  let soma = 0;
+  let resto;
+
+  for (let i = 1; i <= 9; i++) {
+    soma += parseInt(cpf.charAt(i - 1)) * (11 - i);
+  }
+
+  resto = (soma * 10) % 11;
+
+  if (resto === 10 || resto === 11) {
+    resto = 0;
+  }
+
+  if (resto !== parseInt(cpf.charAt(9))) {
+    return false; // Verifica o primeiro dígito verificador
+  }
+
+  soma = 0;
+
+  for (let i = 1; i <= 10; i++) {
+    soma += parseInt(cpf.charAt(i - 1)) * (12 - i);
+  }
+
+  resto = (soma * 10) % 11;
+
+  if (resto === 10 || resto === 11) {
+    resto = 0;
+  }
+
+  if (resto !== parseInt(cpf.charAt(10))) {
+    return false; // Verifica o segundo dígito verificador
+  }
+
+  return true; // CPF válido
+}
 
 /**
  * obtemDados.
@@ -102,22 +144,45 @@ async function carregaDadosAlteracao(db, id) {
 
 function salvar(event, collection) {
   event.preventDefault(); // evita que o formulário seja recarregado
-  //Verifica os campos obrigatórios
+  // Verifica os campos obrigatórios
   if (document.getElementById("nome").value === "") {
-    alerta("⚠️É obrigatório informar o nome!", "warning");
-  }
-  else if (document.getElementById("cpf").value === "") {
-    alerta("⚠️É obrigatório informar o cpf!", "warning");
+    alerta("⚠️ É obrigatório informar o nome!", "warning");
+  } else if (document.getElementById("email").value === "") {
+    alerta("⚠️ É obrigatório informar o email!", "warning");
+  }else if (document.getElementById("cpf").value === "") {
+    alerta("⚠️ É obrigatório informar o CPF!", "warning");
+  } else if (document.getElementById("nascimento").value === "") {
+    alerta("⚠️ É obrigatório informar o nascimento!", "warning");
   } 
-  else if (document.getElementById("nascimento").value === "") {
-    alerta("⚠️É obrigatório informar o nascimento!", "warning");
-  }
-  else if (document.getElementById("email").value === "") {
-    alerta("⚠️É obrigatório informar o email!", "warning");
-  }
-  else {
+   else if (!validarEmail(document.getElementById("email").value)) {
+    alerta("⚠️ Informe um email válido!", "warning");
+  } else if (!validarCPF(document.getElementById("cpf").value)) {
+    alerta("⚠️ Informe um CPF válido!", "warning");
+  } else {
     incluir(event, collection);
   }
+}
+
+/**
+ * validarCPF.
+ * Valida o formato do CPF utilizando uma expressão regular.
+ * @param {string} cpf - O CPF a ser validado
+ * @return {boolean} - true se o CPF for válido, false caso contrário
+ */
+function validarCPF(cpf) {
+  const regex = /^[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}$/;
+  return regex.test(cpf);
+}
+
+/**
+ * validarEmail.
+ * Valida o formato do email utilizando uma expressão regular.
+ * @param {string} email - O email a ser validado
+ * @return {boolean} - true se o email for válido, false caso contrário
+ */
+function validarEmail(email) {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(email);
 }
 
 async function incluir(event, collection) {

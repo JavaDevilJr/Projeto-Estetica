@@ -1,4 +1,6 @@
 
+
+
 /*Serviços*/
 
 /**
@@ -9,37 +11,41 @@
  */
 
 async function obtemDadosServicos(collection) {
-    let spinner = document.getElementById("carregandoDados");
-    let tabela = document.getElementById("tabelaDadosServicos");
-    await firebase
-      .database()
-      .ref(collection)
-      .orderByChild("nome")
-      .on("value", (snapshot) => {
-        tabela.innerHTML = "";
-        let cabecalho = tabela.insertRow();
-        cabecalho.className = "fundo-laranja-escuro";
-        cabecalho.insertCell().textContent = "Serviço";
-        cabecalho.insertCell().textContent = "Valor";
-        snapshot.forEach((item) => {
-          // Dados do Firebase
-          let db = item.ref._delegate._path.pieces_[0]; //collection
-          let id = item.ref._delegate._path.pieces_[1]; //id do registro
-          //Criando as novas linhas na tabela
-          let novaLinha = tabela.insertRow();
-          novaLinha.insertCell().innerHTML =
-            "<small>" + item.val().servico + "</small>";
-          novaLinha.insertCell().innerHTML = 
-            "<small>" + item.val().valor + "</small>";
-          novaLinha.insertCell().innerHTML = `<button class='btn btn-sm btn-danger' onclick=remover('${db}','${id}')><i class="bi bi-trash"></i></button>
+  let spinner = document.getElementById("carregandoDados");
+  let tabela = document.getElementById("tabelaDadosServicos");
+  await firebase
+    .database()
+    .ref(collection)
+    .orderByChild("nome")
+    .on("value", (snapshot) => {
+      tabela.innerHTML = "";
+      let cabecalho = tabela.insertRow();
+      cabecalho.className = "fundo-laranja-escuro";
+      cabecalho.insertCell().textContent = "Serviço";
+      cabecalho.insertCell().textContent = "Valor";
+      snapshot.forEach((item) => {
+        // Dados do Firebase
+        let db = item.ref._delegate._path.pieces_[0]; //collection
+        let id = item.ref._delegate._path.pieces_[1]; //id do registro
+        // Criando as novas linhas na tabela
+        let novaLinha = tabela.insertRow();
+        novaLinha.insertCell().innerHTML =
+          "<small>" + item.val().servico + "</small>";
+
+        // Exibindo o valor em Reais (BRL)
+        let valorEmReais = parseFloat(item.val().valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        novaLinha.insertCell().innerHTML =
+          "<small>" + valorEmReais + "</small>";
+          
+        novaLinha.insertCell().innerHTML = `<button class='btn btn-sm btn-danger' onclick=remover('${db}','${id}')><i class="bi bi-trash"></i></button>
         <button class='btn btn-sm btn-warning' onclick=carregaDadosAlteracao('${db}','${id}')><i class="bi bi-pencil-square"></i></button>`;
-        });
-        let rodape = tabela.insertRow();
-        rodape.className = "fundo-laranja-claro";
-        rodape.insertCell().colSpan = "6";
       });
-    spinner.classList.add("d-none"); //oculta o carregando...
-  }
+      let rodape = tabela.insertRow();
+      rodape.className = "fundo-laranja-claro";
+      rodape.insertCell().colSpan = "6";
+    });
+  spinner.classList.add("d-none"); //oculta o carregando...
+}
   
   /**
    * obtemDados.
@@ -54,7 +60,6 @@ async function obtemDadosServicos(collection) {
       .database()
       .ref(db + "/" + id)
       .on("value", (snapshot) => {
-        document.getElementById("id").value = id;
         document.getElementById("servico").value = snapshot.val().servico;
         document.getElementById("valor").value = snapshot.val().valor;
       });
@@ -64,7 +69,7 @@ async function obtemDadosServicos(collection) {
   
   function salvarServico(event, collection) {
     event.preventDefault(); 
-    //Verifica os campos obrigatórios
+    // Verifica os campos obrigatórios
     if (document.getElementById("servico").value === "") {
       alerta("⚠️É obrigatório informar o serviço!", "warning");
     } 
@@ -72,7 +77,12 @@ async function obtemDadosServicos(collection) {
       alerta("⚠️É obrigatório informar o valor!", "warning");
     }
     else {
-      incluir(event, collection);
+      const valor = parseFloat(document.getElementById("valor").value);
+      if (valor >= 0) {
+        incluir(event, collection);
+      } else {
+        alerta("⚠️O valor não pode ser negativo!", "warning");
+      }
     }
   }
   
@@ -114,7 +124,7 @@ async function obtemDadosServicos(collection) {
   
   async function alterar(event, collection) {
     let usuarioAtual = firebase.auth().currentUser;
-    let botaoSalvar = document.getElementById("btnSalvar");
+    let botaoSalvar = document.getElementById("btnSalvarServico");
     botaoSalvar.innerText = "Aguarde...";
     event.preventDefault();
     //Obtendo os campos do formulário

@@ -72,6 +72,26 @@ function adicionarServico() {
     var valorUnitario = document.getElementById('valor').value
     var subtotal = (quantidade * valorUnitario).toFixed(2)
 
+    if (!cliente) {
+        alert("⚠️ Selecione o cliente!");
+        return;
+      }
+    if (!descricao) {
+        alert("⚠️ Selecione o serviço!");
+        return;
+      }
+    
+      // Verificar se quantidade e valorUnitario são números válidos
+      if (quantidade <= 0 || isNaN(quantidade)) {
+        alert("⚠️ A quantidade deve ser um número maior que zero!");
+        return;
+      }
+    
+      if (valorUnitario <= 0 || isNaN(valorUnitario)) {
+        alert("⚠️ O valor deve ser um número maior que zero!");
+        return;
+      }
+
     servicosPrestados.push({
         dataEmissao: dataEmissao,
         cliente: cliente,
@@ -80,6 +100,8 @@ function adicionarServico() {
         valorUnitario: valorUnitario,
         subtotal: subtotal
     })
+
+    
 
     // Limpar os campos
     document.getElementById('valor').value = '';
